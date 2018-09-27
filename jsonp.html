@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>Examples</title>
+<meta name="description" content="">
+<meta name="keywords" content="">
+<link href="" rel="stylesheet">
+</head>
+<body>
+  
+  <input type="text" id="ipt">
+  <div id="box"></div>
+
+  <script>
+
+    // ipt.onchange = function(){
+    //   var node = document.createElement("script");
+    //   node.src = "https://search.mi.com/search/expand?keyword="+ ipt.value +"&jsonpcallback=xmsearch";
+    //   document.body.append(node);
+    // }
+
+    // var html = [];
+    // function xmsearch(data){
+    //   console.log(data);
+    //   for(var i = 0;i < data.length;i++){
+    //     html.push('<p>'+data[i].Key+'</p>');
+    //   }
+    //   box.innerHTML = html.join('');
+    // }
+    
+
+    function jsonp(url,fname,callback){
+      var node = document.createElement("script");
+      node.src = url;
+      document.body.appendChild(node);
+      window[fname] = function(data){
+        callback(data);
+        // console.log(data);
+        document.body.removeChild(node);
+      };
+      document.body.appendChild(node);
+    }
+
+    ipt.onchange = function(){
+      var html = [];
+      jsonp("https://search.mi.com/search/expand?keyword="+ ipt.value +"&jsonpcallback=xmsearch","xmsearch",function(data){
+          console.log(data);
+          for(var i = 0;i < data.length;i++){
+            html.push('<p>'+data[i].Key+'</p>');
+          }
+          box.innerHTML = html.join('');
+      });
+
+    }
+
+  </script>
+
+</body>
+</html>
